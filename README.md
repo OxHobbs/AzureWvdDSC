@@ -8,7 +8,7 @@ This script and DSC resource module will hopefully ease some pains when needing 
 
 The script to kick off the bootstrap process is in the root of the repo, `Bootstrap-VMs-FSLogix.ps1`.
 
-This script can take three optional parameters:
+This script can take four optional parameters:
 
     ResourceGroupName = [The resource group in which the storage account and session hosts reside]
     StorageAccountName = [The name of the storage account where the DSC artifacts will be staged]
