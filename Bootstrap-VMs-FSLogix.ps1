@@ -20,40 +20,6 @@ if (-not $VMNames)
 }
 
 # =====================================================================================================================
-
-Install-RequiredModules
-
-$params = @{
-    ConfigurationPath = ".\AzureWvdDsc\Examples\SetupFSLogix.ps1"
-    ResourceGroupName = $resourceGroupName
-    StorageAccountName = $storageAccountName
-}
-Publish-AzVMDscConfiguration -Force @params
-
-foreach ($vm in $VMNames)
-{
-    $vmParams = @{
-        ResourceGroupName = $resourceGroupName
-        VMName = $vm
-        Version = '2.76'
-        ArchiveStorageAccountName = $storageAccountName
-        ArchiveBlobName = 'SetupFSLogix.ps1.zip'
-        ConfigurationName = 'SetupFSLogix'
-        ConfigurationArgument = @{ProfileShare = $ProfileShare}
-    }
-
-    if ($null -ne (Get-AzVMExtension -ResourceGroupName $resourceGroupName -VMName $vm -Name 'dscextension' -ErrorAction SilentlyContinue))
-    {
-        Write-Verbose "Must remove existing dsc extension to apply new one"
-        Remove-AzVMExtension -ResourceGroupName $resourceGroupName -VMName $vm -Name dscextension -Force
-    }
-
-    Set-AzVMDscExtension -Force @vmParams
-
-}
-
-
-# =======================================================================
 function Install-RequiredModules
 {
     [CmdletBinding()]
@@ -97,3 +63,37 @@ function Install-RequiredModules
         }
     }
 }
+
+Install-RequiredModules
+
+$params = @{
+    ConfigurationPath = ".\AzureWvdDsc\Examples\SetupFSLogix.ps1"
+    ResourceGroupName = $resourceGroupName
+    StorageAccountName = $storageAccountName
+}
+Publish-AzVMDscConfiguration -Force @params
+
+foreach ($vm in $VMNames)
+{
+    $vmParams = @{
+        ResourceGroupName = $resourceGroupName
+        VMName = $vm
+        Version = '2.76'
+        ArchiveStorageAccountName = $storageAccountName
+        ArchiveBlobName = 'SetupFSLogix.ps1.zip'
+        ConfigurationName = 'SetupFSLogix'
+        ConfigurationArgument = @{ProfileShare = $ProfileShare}
+    }
+
+    if ($null -ne (Get-AzVMExtension -ResourceGroupName $resourceGroupName -VMName $vm -Name 'dscextension' -ErrorAction SilentlyContinue))
+    {
+        Write-Verbose "Must remove existing dsc extension to apply new one"
+        Remove-AzVMExtension -ResourceGroupName $resourceGroupName -VMName $vm -Name dscextension -Force
+    }
+
+    Set-AzVMDscExtension -Force @vmParams
+
+}
+
+
+# =======================================================================
