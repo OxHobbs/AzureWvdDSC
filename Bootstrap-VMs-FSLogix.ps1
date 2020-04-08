@@ -66,6 +66,9 @@ function Install-RequiredModules
 
 Install-RequiredModules
 
+$tempScr = Join-Path $env:Temp "tempScr.ps1"
+"Set-ExecutionPolicy Unrestricted -Force" | Out-File $tempScr
+
 $params = @{
     ConfigurationPath = ".\AzureWvdDsc\Examples\SetupFSLogix.ps1"
     ResourceGroupName = $resourceGroupName
@@ -85,13 +88,19 @@ foreach ($vm in $VMNames)
         ConfigurationArgument = @{ProfileShare = $ProfileShare}
     }
 
+    Write-Verbose "Running command"
+    Invoke-AzVMRunCommand -ResourceGroupName $resourceGroupName -VMName $vm -CommandId RunPowerShellScript -ScriptPath $tempScr
+    Write-Verbose "Command completed"
+
     if ($null -ne (Get-AzVMExtension -ResourceGroupName $resourceGroupName -VMName $vm -Name 'dscextension' -ErrorAction SilentlyContinue))
     {
         Write-Verbose "Must remove existing dsc extension to apply new one"
         Remove-AzVMExtension -ResourceGroupName $resourceGroupName -VMName $vm -Name dscextension -Force
     }
 
+    Write-Verbose "Beginning DSC extension"
     Set-AzVMDscExtension -Force @vmParams
+    Write-Verbose "$vm - complete"
 
 }
 
