@@ -1,0 +1,9 @@
+
+[ClassVersion("1.0.0.0"), FriendlyName("FSLogixInstall")]
+class FSLogixInstall : OMI_BaseResource
+{
+    [Write, ValueMap{"Absent","Present"}, Values{"Absent","Present"}] String Ensure;
+    [Key] String Version;
+    [Write] String PayloadUri;
+};
+

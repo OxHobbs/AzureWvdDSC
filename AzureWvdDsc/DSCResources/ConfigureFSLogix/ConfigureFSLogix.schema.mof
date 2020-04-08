@@ -1,0 +1,8 @@
+
+[ClassVersion("1.0.0.0"), FriendlyName("ConfigureFSLogix")]
+class ConfigureFSLogix : OMI_BaseResource
+{
+    [Key, Description("Specify UNC path of share for profile storage")] String ProfileShare;
+    [Write, Description("Enables/Disables profile fslogix")] Boolean Enabled;
+};
+
