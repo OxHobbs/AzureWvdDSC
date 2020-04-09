@@ -10,10 +10,10 @@ The script to kick off the bootstrap process is in the root of the repo, `Bootst
 
 This script can take four optional parameters:
 
-    ResourceGroupName = [The resource group in which the storage account and session hosts reside]
-    StorageAccountName = [The name of the storage account where the DSC artifacts will be staged]
-    ProfileShare = [The UNC Path where your FSLogix profile VHDs will be stored]
-    VMNames = [Provide a list of VMs that need to be configured.  If this value is ommitted then the script will dynamically pull a list of VMs from the provided resource group]
+* `ResourceGroupName`:The resource group in which the storage account and session hosts reside
+* `StorageAccountName`: The name of the storage account where the DSC artifacts will be staged
+* `ProfileShare`: The UNC Path where your FSLogix profile VHDs will be stored
+* `VMNames`: Provide a list of VMs that need to be configured.  If this value is ommitted then the script will    dynamically pull a list of VMs from the provided resource group
 
 ## Examples
 
