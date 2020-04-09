@@ -1,3 +1,5 @@
+Import-Module "$PSScriptRoot\..\..\Helpers\helpers.psm1"
+
 function Get-TargetResource
 {
     [CmdletBinding()]
@@ -27,13 +29,18 @@ function Set-TargetResource
         $Enabled = $true
     )
 
+    if (-not (Test-FSLogixInstalled))
+    {
+        Write-Warning "FSLogix is not installed, will not confiure system.  Use FSLogixInstall DSC resource or some other means to install FSLogix"
+        return
+    }
+
     Write-Verbose "Calling for creation of profile key"
     New-FSLogixProfileKey
 
     New-FSLogixEnabledProperty -Enabled $Enabled
     
     New-FSLogixVHDLocationsProperty -SharePath $ProfileShare
-
 }
 
 

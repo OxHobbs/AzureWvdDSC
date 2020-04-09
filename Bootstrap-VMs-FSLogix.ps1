@@ -1,3 +1,4 @@
+# v0.2.0
 [CmdletBinding()]
 param(
     $resourceGroupName = 'wvd-lab',
@@ -16,7 +17,7 @@ param(
 
 if (-not $VMNames)
 {
-    $VMs_dynamic = (Get-AzVM -ResourceGroupName $resourceGroupName |  Where Name -notmatch 'dc').Name
+    $VMNames = (Get-AzVM -ResourceGroupName $resourceGroupName |  Where Name -notmatch 'dc').Name
 }
 
 # =====================================================================================================================
@@ -28,7 +29,7 @@ function Install-RequiredModules
     $mods = @(
         @{
             Name = 'AzureWvdDsc'
-            Version = '0.1.0'
+            Version = '0.2.0'
         }
     )
 
@@ -74,7 +75,19 @@ $params = @{
     ResourceGroupName = $resourceGroupName
     StorageAccountName = $storageAccountName
 }
-Publish-AzVMDscConfiguration -Force @params
+
+Write-Host "Publishing artifacts to storage account $storageAccountName" -NoNewline
+try
+{
+    $null = Publish-AzVMDscConfiguration -Force @params
+    Write-Host " .. OK" -ForegroundColor Green
+}
+catch
+{
+    Write-Host " .. failed" -ForegroundColor Red
+    Write-Error $_
+    break
+}
 
 foreach ($vm in $VMNames)
 {
@@ -88,21 +101,36 @@ foreach ($vm in $VMNames)
         ConfigurationArgument = @{ProfileShare = $ProfileShare}
     }
 
-    Write-Verbose "Running command"
-    Invoke-AzVMRunCommand -ResourceGroupName $resourceGroupName -VMName $vm -CommandId RunPowerShellScript -ScriptPath $tempScr
-    Write-Verbose "Command completed"
+    Write-Host "`nProcessing VM: $vm"
 
-    if ($null -ne (Get-AzVMExtension -ResourceGroupName $resourceGroupName -VMName $vm -Name 'dscextension' -ErrorAction SilentlyContinue))
+    try
     {
-        Write-Verbose "Must remove existing dsc extension to apply new one"
-        Remove-AzVMExtension -ResourceGroupName $resourceGroupName -VMName $vm -Name dscextension -Force
+        Write-Verbose "Running command"
+        Write-Host "-- Running pre-requisites" -NoNewline
+        $null = Invoke-AzVMRunCommand -ResourceGroupName $resourceGroupName -VMName $vm -CommandId RunPowerShellScript -ScriptPath $tempScr -ErrorAction Stop
+        Write-Host " .. OK" -ForegroundColor Green
+        Write-Verbose "Command completed"
+
+        if ($null -ne (Get-AzVMExtension -ResourceGroupName $resourceGroupName -VMName $vm -Name 'dscextension' -ErrorAction SilentlyContinue))
+        {
+            Write-Host "-- Must remove existing DSC extension" -NoNewline
+            Write-Verbose "Must remove existing dsc extension to apply new one"
+            $null = Remove-AzVMExtension -ResourceGroupName $resourceGroupName -VMName $vm -Name dscextension -Force -ErrorAction Stop
+            Write-Host " .. OK" -ForegroundColor Green
+        }
+
+        Write-Host "-- Processing DSC extension" -NoNewline
+        Write-Verbose "Beginning DSC extension"
+        $null = Set-AzVMDscExtension -ErrorAction Stop -Force @vmParams
+        Write-Verbose "$vm - complete"        
+        Write-Host " .. OK" -ForegroundColor Green
+    }
+    catch
+    {
+        Write-Host " .. Failed" -ForegroundColor Red
+        Write-Error $_
+        continue
     }
 
-    Write-Verbose "Beginning DSC extension"
-    Set-AzVMDscExtension -Force @vmParams
-    Write-Verbose "$vm - complete"
 
 }
-
-
-# =======================================================================

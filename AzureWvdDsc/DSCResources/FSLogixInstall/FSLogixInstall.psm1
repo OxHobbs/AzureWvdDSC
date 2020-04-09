@@ -1,3 +1,5 @@
+Import-Module "$PSScriptRoot\..\..\Helpers\helpers.psm1"
+
 function Get-TargetResource
 {
     [CmdletBinding()]
@@ -71,10 +73,7 @@ function Test-TargetResource
 
     Write-Verbose "Checking to see if FSLogix is installed already"
     
-    $IsInstalled = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*" | Where-Object DisplayName -match 'FSLogix'
-
-    if ($IsInstalled) { return $true }
-    return $false
+    return (Test-FSLogixInstalled)
 }
 
 
