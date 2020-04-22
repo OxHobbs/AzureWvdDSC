@@ -17,8 +17,6 @@ This script can take four optional parameters:
 
 ## Examples
 
-![](img/example1.jpg)
-
 ```
 .\Bootstrap-VMs-FSLogix.ps1 -ResourceGroupName 'wvd-lab' -StorageAccountName 'wvdlabdalsjf' -ProfileShare \\myUnc\Share -VMNames 'wvd-personal-1', 'wvd-personal-2' -Verbose
 ```
@@ -26,6 +24,10 @@ This script can take four optional parameters:
 ```
 .\Bootstrap-VMs-FSLogix.ps1 -ResourceGroupName 'wvd-lab' -StorageAccountName 'wvdlabdljf' -ProfileShare \\myUnc\Share -Verbose
 ```
+
+Screen capture example
+
+![](img/example1.jpg)
 
 ## DSC Resource Module - AzureWvdDsc
 
