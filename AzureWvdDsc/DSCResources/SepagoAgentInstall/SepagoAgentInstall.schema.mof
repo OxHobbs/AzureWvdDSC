@@ -1,0 +1,7 @@
+
+[ClassVersion("1.0.0.0"), FriendlyName("SepagoAgentInstall")]
+class SepagoAgentInstall : OMI_BaseResource
+{
+    [Key, ValueMap{"Present","Absent"}, Values{"Present","Absent"}] String Ensure;
+};
+

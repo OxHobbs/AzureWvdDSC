@@ -1,0 +1,8 @@
+
+[ClassVersion("1.0.0.0"), FriendlyName("SepagoAgentConfig")]
+class SepagoAgentConfig : OMI_BaseResource
+{
+    [Key, Description("LogAnalytics workspace ID to which the sepago monitoring data will be sent")] String WorkspaceId;
+    [Write, Description("The key to authenticate to your log analytics workspace")] String WorkspaceKey;
+};
+

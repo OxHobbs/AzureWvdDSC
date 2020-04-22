@@ -25,9 +25,22 @@ This script can take four optional parameters:
 .\Bootstrap-VMs-FSLogix.ps1 -ResourceGroupName 'wvd-lab' -StorageAccountName 'wvdlabdljf' -ProfileShare \\myUnc\Share -Verbose
 ```
 
+Screen capture example
+
+![](img/example1.jpg)
+
+![](img/example2.jpg)
+
 ## DSC Resource Module - AzureWvdDsc
 
 The `AzureWvdDsc` module contains two DSC resources:
 
 * `FSLogixInstall` - Installs FSLogix (x64)
 * `ConfigureFSLogix` - Configures the necessary registry settings for FSLogix to use a file share for user profile VHDs
+* `SepagoAgentInstall` - Installs the log analytics agent for sepago
+* `SepagoAgentConfig` - Configured the sepago agent configuration file and scheduled task
+
+## ChangeLog
+
+v0.3.0
+* Added `SepagoAgentConfig` and `SepagoAgentInstall` DSC resources

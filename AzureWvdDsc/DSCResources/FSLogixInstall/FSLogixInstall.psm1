@@ -27,12 +27,18 @@ function Set-TargetResource
 
         [Parameter(Mandatory = $true)]
         [System.String]
-        $Version,
+        $Version = "latest",
 
         [Parameter()]
         [System.String]
         $PayloadUri = 'https://aka.ms/fslogix_download'
     )
+
+    if ($Version -ne 'latest')
+    {
+        Write-Warning "Specifying a specific version is not yet supported; please use latest for now"
+        break
+    }
 
     $fsLogixArchiveZip = "fslogix_$(get-date -Format yyddMMhhmmss).zip"
     $fslogixArchivePath = Join-Path $env:Temp $fsLogixArchiveZip
