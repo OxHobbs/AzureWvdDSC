@@ -2,18 +2,26 @@
 
 ## Description
 
-This script and DSC resource module will hopefully ease some pains when needing to install and configure FSLogix on Azure WVD session hosts.
+This script and DSC resource module will hopefully ease some pains when needing to install and configure FSLogix and/or Sepago on Azure WVD session hosts.
 
 ## Script
 
-The script to kick off the bootstrap process is in the root of the repo, `Bootstrap-VMs-FSLogix.ps1`.
+The script to kick off the bootstrap process for only FSLogix is in the root of the repo, `Bootstrap-VMs-FSLogix.ps1`.
+There is also a script available to kickoff the bootstrap process of both FSLogix and Sepago, `Bootstrap-VMs-FSLogix_Sepago.ps1`.
 
-This script can take four optional parameters:
+However, the DSC resource is published to the PowerShell Gallery [here](https://www.powershellgallery.com/packages/AzureWvdDsc/0.2.0) and can be used independent of this repository.
+
+This `Bootstrap-VMs-FSLogix` script can take four optional parameters:
 
 * `ResourceGroupName`:The resource group in which the storage account and session hosts reside
 * `StorageAccountName`: The name of the storage account where the DSC artifacts will be staged
 * `ProfileShare`: The UNC Path where your FSLogix profile VHDs will be stored
 * `VMNames`: Provide a list of VMs that need to be configured.  If this value is ommitted then the script will    dynamically pull a list of VMs from the provided resource group
+
+The `Bootstrap-VMs-FSLogix_Sepago` script takes the same parameters above and adds the following:
+
+* `WorkspaceId`: The ID of the Log Analytics workspace to which the sepago agent will send data.
+* `WorkspaceKey`: The key used to obtain access to the Log Analytics workspace.
 
 ## Examples
 
@@ -25,7 +33,7 @@ This script can take four optional parameters:
 .\Bootstrap-VMs-FSLogix.ps1 -ResourceGroupName 'wvd-lab' -StorageAccountName 'wvdlabdljf' -ProfileShare \\myUnc\Share -Verbose
 ```
 
-Screen capture example
+Screen capture example of `Bootstrap-VMs-FSLogix_Sepago`
 
 ![](img/example1.jpg)
 
