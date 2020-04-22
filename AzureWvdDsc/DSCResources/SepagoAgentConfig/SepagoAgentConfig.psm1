@@ -38,8 +38,14 @@ function Set-TargetResource
     )
 
     Write-Verbose "Configuring the config file for sepago monitoring"
-    Set-Content -Path $ConfigFile -Value (Get-ConfigFileContent)
-    Start-Process -FilePath $ExeFile -ArgumentList "- install" -Wait
+    Set-Content -Path $ConfigFile -Value (Get-ConfigFileContent -WorkspaceId $WorkspaceId -WorkspaceKey $WorkspaceKey)
+
+    $schTaskName = 'ITPC-LogAnalyticAgent for RDS and Citrix'
+    if (-not (Get-ScheduledTask -TaskName $schTaskName -ErrorAction SilentlyContinue))
+    {
+        Write-Verbose 'Scheduled tasks not found, running the install command to configure the scheduled task'
+        Start-Process -FilePath $ExeFile -ArgumentList "-install"
+    }
 }
 
 
@@ -63,8 +69,9 @@ function Test-TargetResource
 
     $WorkspaceIdExists = $ActualContent -match $WorkspaceId
     $WorkspaceKeyExists = $ActualContent -match $WorkspaceKey
+    $TaskExists = Get-ScheduledTask -TaskName 'ITPC-LogAnalyticAgent for RDS and Citrix' -ErrorAction SilentlyContinue
 
-    if ($WorkspaceIdExists -and $WorkspaceKeyExists) { return $true } 
+    if ($WorkspaceIdExists -and $WorkspaceKeyExists -and $TaskExists) { return $true } 
     return $false
 }
 
