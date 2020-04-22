@@ -29,6 +29,8 @@ Screen capture example
 
 ![](img/example1.jpg)
 
+![](img/example2.jpg)
+
 ## DSC Resource Module - AzureWvdDsc
 
 The `AzureWvdDsc` module contains two DSC resources:
