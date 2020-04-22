@@ -1,4 +1,4 @@
-# Azure WVD FSLogix Bootstrap Script
+# Azure WVD Bootstrap Script and DSC Resource Module
 
 ## Description
 
