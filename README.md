@@ -15,7 +15,7 @@ This `Bootstrap-VMs-FSLogix` script can take four optional parameters:
 
 * `ResourceGroupName`:The resource group in which the storage account and session hosts reside
 * `StorageAccountName`: The name of the storage account where the DSC artifacts will be staged
-* `StorageAccountResourceGroup`: Optional - Specify the resource group in which the storage account for the DSC artifact resides.  If omitted, the `ResourceGroupName` parameter will be used for both VM resources and the storage account.
+* `StorageAccountResourceGroupName`: Optional - Specify the resource group in which the storage account for the DSC artifact resides.  If omitted, the `ResourceGroupName` parameter will be used for both VM resources and the storage account.
 * `ProfileShare`: The UNC Path where your FSLogix profile VHDs will be stored
 * `VMNames`: Provide a list of VMs that need to be configured.  If this value is ommitted then the script will    dynamically pull a list of VMs from the provided resource group
 
