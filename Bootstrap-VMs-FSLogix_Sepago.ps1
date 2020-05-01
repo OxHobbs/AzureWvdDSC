@@ -2,7 +2,8 @@
 [CmdletBinding()]
 param(
     $resourceGroupName = 'wvd-lab',
-    $storageAccountName = 'wvdoxhobbs',
+    $StorageAccountName = 'wvdoxhobbs',
+    $StorageAccountResourceGroupName = $resourceGroupName,
     $ProfileShare = "\\userProvided\Share",
     [Parameter(Mandatory)]
     $WorkspaceId,
@@ -69,7 +70,7 @@ $tempScr = Join-Path $env:Temp "tempScr.ps1"
 
 $params = @{
     ConfigurationPath = ".\AzureWvdDsc\Examples\SetupFSLogixSepago.ps1"
-    ResourceGroupName = $resourceGroupName
+    ResourceGroupName = $StorageAccountResourceGroupName
     StorageAccountName = $storageAccountName
 }
 
@@ -93,6 +94,7 @@ foreach ($vm in $VMNames)
         VMName = $vm
         Version = '2.76'
         ArchiveStorageAccountName = $storageAccountName
+        ArchiveResourceGroupName = $StorageAccountResourceGroupName
         ArchiveBlobName = 'SetupFSLogixSepago.ps1.zip'
         ConfigurationName = 'SetupFSLogixSepago'
         ConfigurationArgument = @{ProfileShare = $ProfileShare; WorkspaceId = $WorkspaceId; WorkspaceKey = $WorkspaceKey}
