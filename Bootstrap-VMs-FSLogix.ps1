@@ -3,7 +3,7 @@
 param(
     $ResourceGroupName = 'wvd-lab',
     $StorageAccountName = 'wvdoxhobbs',
-    $StorageAccountResourceGroup = $resourceGroupName,
+    $StorageAccountResourceGroupName = $resourceGroupName,
     $ProfileShare = "\\userProvided\Share",
     $VMNames = @()
 )
@@ -73,7 +73,7 @@ $tempScr = Join-Path $env:Temp "tempScr.ps1"
 
 $params = @{
     ConfigurationPath = ".\AzureWvdDsc\Examples\SetupFSLogix.ps1"
-    ResourceGroupName = $StorageAccountResourceGroup
+    ResourceGroupName = $StorageAccountResourceGroupName
     StorageAccountName = $storageAccountName
 }
 
@@ -97,7 +97,7 @@ foreach ($vm in $VMNames)
         VMName = $vm
         Version = '2.76'
         ArchiveStorageAccountName = $storageAccountName
-        ArchiveResourceGroupName = $StorageAccountResourceGroup
+        ArchiveResourceGroupName = $StorageAccountResourceGroupName
         ArchiveBlobName = 'SetupFSLogix.ps1.zip'
         ConfigurationName = 'SetupFSLogix'
         ConfigurationArgument = @{ProfileShare = $ProfileShare}
